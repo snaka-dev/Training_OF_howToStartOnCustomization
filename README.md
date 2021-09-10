@@ -1,5 +1,5 @@
-# Training_OF_howToStartOnCustomizing
-Training_OF_howToStartOnCustomizing
+# Training_OF_howToStartOnCustomization
+Training_OF_howToStartOnCustomization
 
 ## Disclaimer
 
