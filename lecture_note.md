@@ -8,7 +8,7 @@
 ## 注意
 
 　本資料の内容は，OpenFOAMユーザーガイド，プログラマーズガイド，OpenFOAM Wiki，CFD Online，その他多くの情報を参考にしています。開発者，情報発信者の皆様に深い謝意を表します。
-　
+
 　内容は，講師の個人的な経験（主に，卒研生等とのコードリーディング）から得た知識を共有するものです。この内容の正確性を保証することはできません。この情報を使用したことによって問題が生じた場合，その責任は負いかねますので，予めご了承ください。
 
 <a name="tableOfContents"></a>
@@ -18,41 +18,60 @@
 - [想定する受講者・前提知識](#presupposition)
 - [基本方針](#direction)
 
-- [準備](#pre)
-  - [本書の標記について](#remarks)
-  - [Linuxコマンドの確認](#linuxCommand)
-- [使用環境の確認](#checkEnvVariables)
-- [新しい名前のソルバ作成](#createNewNameSolver)
-  - [標準ファイルのコピー (solver)](#copyStandardSolver)
-  - [名前の変更](#renameStandardSolver)
-  - [コンパイル](#compileRenamedSolver)
-- [テスト用例題（ケース）の作成](#createTestCase)
-  - [標準例題のコピー](#copyStandardTutorial)
-  - [system/controlDictの編集（application名の変更）](#modifyControlDict)
-  - [計算実行と結果の確認](#runAndCheck)
-- [ライブラリのカスタマイズ手順の確認（ライブラリ全体の複製）](#howtoCompileLib)
-  - [copy original files (library)](#copyStandardLib)
-  - [モデルの複製と名前の変更](#copyAndRenameStandardClass)
-  - [ライブラリに新クラスを追加：Make/files](#addNewClassToLib)
-  - [コンパイル](#compileRenamedLib)
-  - [動作確認](#testRenamedLib)
-- [ライブラリのカスタマイズ（新しい粘性モデルだけを含むライブラリの作成）](#createNewLib)
-  - [copy original files](#copyStandLib02)
-  - [modify source files](#modifyLib)
-  - [Make ディレクトリの files と options ファイルを修正](#modifyMakeFiles)
-  - [compile](#compileModifiedLib)
-- [例題の作成](#createTestCase02)
-- [考察](#discussion)
-  - [ライブラリ丸ごとコピーと，クラス単位の改造，どちらが良いの？](#whichWay)
-  - [乱流モデルとtransportModelとの違い](#turbAndtransport)
-- [モデルのさらなる改造](#moreModification)
-  - [newCrossPowerLaw.H の修正](#newCrossPowerLawH)
-  - [newCrossPowerLaw.C の修正](#newCrossPowerLawC)
-  - [コンパイル](#compileModifiedNewCrossPowerLaw)
-  - [動作確認](#testModifiedNewCrossPowerLaw)
-- [参考情報](#ref)
-         - [ソルバからの書き出しにfunctionObjectが使えるのか？](#functionObject)
-  - [作業メモ](#memo)
+- [OpenFOAMカスタマイズの始め方](#openfoamカスタマイズの始め方)
+        - [2020年8月23日オープンCAE勉強会＠富山 (富山県立大学　中川慎二)](#2020年8月23日オープンcae勉強会富山-富山県立大学中川慎二)
+  - [Disclaimer](#disclaimer)
+  - [注意](#注意)
+  - [目次](#目次)
+  - [はじめに・目的](#はじめに目的)
+  - [環境](#環境)
+  - [想定する受講者・前提知識](#想定する受講者前提知識)
+  - [基本方針](#基本方針)
+  - [準備](#準備)
+    - [本書の標記について](#本書の標記について)
+    - [Linuxコマンドの確認](#linuxコマンドの確認)
+      - [OpenFOAM Linux Guide](#openfoam-linux-guide)
+      - [sed](#sed)
+  - [使用環境の確認](#使用環境の確認)
+  - [新しい名前のソルバ作成](#新しい名前のソルバ作成)
+    - [標準ファイルのコピー (solver)](#標準ファイルのコピー-solver)
+    - [名前の変更](#名前の変更)
+    - [ソルバ名の変更：Make/filesの修正](#ソルバ名の変更makefilesの修正)
+    - [コンパイル](#コンパイル)
+  - [テスト用例題（ケース）の作成](#テスト用例題ケースの作成)
+    - [標準例題のコピー copy original files (tutorial)](#標準例題のコピー-copy-original-files-tutorial)
+    - [system/controlDictの編集（application名の変更）](#systemcontroldictの編集application名の変更)
+    - [計算実行と結果の確認](#計算実行と結果の確認)
+  - [ライブラリのカスタマイズ手順の確認（ライブラリ全体の複製）](#ライブラリのカスタマイズ手順の確認ライブラリ全体の複製)
+    - [copy original files (library)](#copy-original-files-library)
+    - [モデルの複製と名前の変更](#モデルの複製と名前の変更)
+    - [ライブラリに新クラスを追加：Make/files](#ライブラリに新クラスを追加makefiles)
+    - [コンパイル](#コンパイル-1)
+    - [動作確認](#動作確認)
+      - [例題の修正：改名した粘性モデルの使用](#例題の修正改名した粘性モデルの使用)
+      - [考察](#考察)
+      - [動作時に使用されるライブラリの確認](#動作時に使用されるライブラリの確認)
+  - [ライブラリのカスタマイズ（新しい粘性モデルだけを含むライブラリの作成）](#ライブラリのカスタマイズ新しい粘性モデルだけを含むライブラリの作成)
+    - [copy original files](#copy-original-files)
+    - [modify source files](#modify-source-files)
+    - [Make ディレクトリの files と options ファイルを修正](#make-ディレクトリの-files-と-options-ファイルを修正)
+      - [Make/files](#makefiles)
+      - [Make/options](#makeoptions)
+    - [compile](#compile)
+  - [例題の作成 create a tutarial case](#例題の作成-create-a-tutarial-case)
+  - [考察](#考察-1)
+    - [ライブラリ丸ごとコピーと，クラス単位の改造，どちらが良いの？](#ライブラリ丸ごとコピーとクラス単位の改造どちらが良いの)
+    - [乱流モデルとtransportModelとの違い](#乱流モデルとtransportmodelとの違い)
+  - [モデルのさらなる改造](#モデルのさらなる改造)
+    - [newCrossPowerLaw.H の修正](#newcrosspowerlawh-の修正)
+    - [newCrossPowerLaw.C の修正](#newcrosspowerlawc-の修正)
+    - [コンパイル](#コンパイル-2)
+    - [動作確認](#動作確認-1)
+- [サンプルファイル](#サンプルファイル)
+  - [参考情報](#参考情報)
+    - [ソルバからの書き出しにfunctionObjectが使えるのか？](#ソルバからの書き出しにfunctionobjectが使えるのか)
+- [作業メモ](#作業メモ)
+  - [環境変数](#環境変数)
 
 
 <a name="objective"></a>
@@ -151,8 +170,9 @@ int n;
 
 > cp   _元ファイル_   _コピー先_
 
-オプション　-p   元のファイル属性を保持（preserve）
-オプション　-r   ディレクトリの中身もコピー ← 再帰的にコピー（recursive）
+　オプション　-p   元のファイル属性を保持（preserve）
+
+　オプション　-r   ディレクトリの中身もコピー ← 再帰的にコピー（recursive）
 
 ファイルやディレクトリの移動：mv （ムーブ）
 
