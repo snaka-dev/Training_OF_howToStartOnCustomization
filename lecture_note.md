@@ -766,9 +766,9 @@ Foam::viscosityModels::newCrossPowerLaw::calcNu() //const//const is commented ou
     )
 ```
 
-参考のために，作成したコード類を圧縮して添付する。
+参考のために，作成したコード類を共有する。
 
-[newCrossPowerLaw.zip](/attachments/976f92c0-cadb-4220-a070-0a8c87d42859)
+[newCrossPowerLaw](./src/newCrossPowerLaw/)
 
 <a name="compileModifiedNewCrossPowerLaw"></a>
 ### コンパイル
@@ -786,13 +786,13 @@ wmake
 
 # サンプルファイル
 
-[mySimpleFoam.zip](/attachments/e42a3a60-757a-408b-b918-543ca687e5b1)
+[mySimpleFoam](./solvers/mySimpleFoam/)
 
-[transportModels.zip](/attachments/3d84c444-9e6e-4c57-afe6-58dba488c034)
+[transportModels](./src/transportModels/)
 
-[newCrossPowerLaw.zip](/attachments/b69b120f-646d-49bb-8a19-201b620554b3)
+[newCrossPowerLaw](./src/newCrossPowerLaw/)
 
-[simpleCar.zip](/attachments/422b2e0b-2e6e-4adc-9b4b-e6bc1158fb49)
+[simpleCar](./tutorials/simpleCar/)
 
 
 
