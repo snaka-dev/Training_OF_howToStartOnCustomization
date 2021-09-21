@@ -19,7 +19,6 @@
 - [基本方針](#direction)
 
 - [OpenFOAMカスタマイズの始め方](#openfoamカスタマイズの始め方)
-        - [2020年8月23日オープンCAE勉強会＠富山 (富山県立大学　中川慎二)](#2020年8月23日オープンcae勉強会富山-富山県立大学中川慎二)
   - [Disclaimer](#disclaimer)
   - [注意](#注意)
   - [目次](#目次)
@@ -129,7 +128,7 @@ OpenFOAM初心者であり，ソースコードのカスタマイズを目指す
 **OpenFOAMで使用するコンパイル・スクリプト wmake については，[別の資料（OpenFOAM コンパイルに関するメモ：リンク）](https://nakagawa-lab.kibe.la/shared/entries/babfd4ea-6b57-4f0a-b218-762d5d4d8d8a)で説明します。**
 
 
-|  |  |
+| ステップ | 内容 |
 | -- | -- |
 | 1 | 名前を変更したソルバの作成<br> 　　simpleFoam から mySimpleFoam へ |
 | 2 | テスト例題の作成 |
