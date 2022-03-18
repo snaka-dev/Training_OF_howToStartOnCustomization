@@ -1,0 +1,5 @@
+newCrossPowerLaw.C
+
+
+
+LIB = $(FOAM_USER_LIBBIN)/libnewCrossPowerLaw
